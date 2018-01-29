@@ -8,7 +8,7 @@ use Signifly\Shopify\Shopify;
 abstract class ApiResource
 {
     /** @var array */
-    public $attributes = [];
+    protected $attributes = [];
 
     /** @var \Signifly\Shopify\Shopify */
     protected $shopify;

@@ -2,7 +2,9 @@
 
 namespace Signifly\Shopify;
 
+use Exception;
 use GuzzleHttp\Client;
+use Signifly\Shopify\Actions\ActionFactory;
 
 class Shopify
 {
@@ -39,5 +41,16 @@ class Shopify
         return array_map(function ($attributes) use ($class) {
             return new $class($attributes, $this);
         }, $collection);
+    }
+
+    public function __call($name, ...$arguments)
+    {
+        try {
+            return (new ActionFactory($name))->make();
+        } catch (Exception $e) {
+            //
+        }
+
+        throw new Exception('Method does not exist');
     }
 }
