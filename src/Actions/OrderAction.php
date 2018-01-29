@@ -4,18 +4,18 @@ namespace Signifly\Shopify\Actions;
 
 class OrderAction extends Action
 {
-    public function cancel()
+    public function cancel($id)
     {
-        return $this->shopify->post($this->path($this->id, 'cancel'));
+        return $this->shopify->post($this->path($id, 'cancel'));
     }
 
-    public function close()
+    public function close($id)
     {
-        return $this->shopify->post($this->path($this->id, 'close'));
+        return $this->shopify->post($this->path($id, 'close'));
     }
 
-    public function open()
+    public function open($id)
     {
-        return $this->shopify->post($this->path($this->id, 'open'));
+        return $this->shopify->post($this->path($id, 'open'));
     }
 }
