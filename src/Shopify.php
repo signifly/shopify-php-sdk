@@ -58,7 +58,7 @@ class Shopify
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-            ];
+            ]
         ]);
     }
 
@@ -92,14 +92,14 @@ class Shopify
      * @param  array $arguments
      * @return \Signifly\Shopify\Actions\Action
      */
-    public function __call($name, ...$arguments)
+    public function __call($name, $arguments)
     {
         try {
-            return (new ActionFactory($name))->make();
+            return (new ActionFactory($name))->make($this);
         } catch (Exception $e) {
             //
         }
 
-        throw new Exception('Method does not exist');
+        throw new Exception("Method {$name} does not exist");
     }
 }

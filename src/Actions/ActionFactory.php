@@ -14,7 +14,7 @@ class ActionFactory
         $this->resourceKey = $resourceKey;
     }
 
-    public function make()
+    public function make($shopify)
     {
         $class = $this->getQualifiedClassName();
 
@@ -22,7 +22,7 @@ class ActionFactory
             throw new Exception('Action does not exist');
         }
 
-        return new $class;
+        return new $class($shopify);
     }
 
     protected function getQualifiedClassName()

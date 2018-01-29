@@ -48,11 +48,11 @@ abstract class Action
 
     protected function getResourceKey()
     {
-        $class = class_basename(get_class());
+        $class = class_basename(get_called_class());
 
         return Str::snake(
             Str::plural(
-                rtrim($class, 'Action')
+                substr($class, 0, -6)
             )
         );
     }
