@@ -11,6 +11,6 @@ class ProductResource extends ApiResource
 
     public function update(array $data)
     {
-        $this->shopify->products()->update($this->id, $data);
+        return $this->shopify->products()->update($this->id, $data);
     }
 }
