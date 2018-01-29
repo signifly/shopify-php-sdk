@@ -73,21 +73,6 @@ class Shopify
     }
 
     /**
-     * Transform the items of the collection to the given class.
-     *
-     * @param  array $collection
-     * @param  string $class
-     * @param  array $extraData
-     * @return array
-     */
-    protected function transformCollection(array $collection, string $class) : array
-    {
-        return array_map(function ($attributes) use ($class) {
-            return new $class($attributes, $this);
-        }, $collection);
-    }
-
-    /**
      * @param  string $name
      * @param  array $arguments
      * @return \Signifly\Shopify\Actions\Action
