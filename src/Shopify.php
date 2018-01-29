@@ -15,17 +15,17 @@ class Shopify
      *
      * @var \GuzzleHttp\Client
      */
-    public $guzzle;
+    public $client;
 
     /**
      * Create a new Shopify instance.
      *
-     * @param  \GuzzleHttp\Client $guzzle
+     * @param  \GuzzleHttp\Client $client
      * @return void
      */
-    public function __construct(Client $guzzle)
+    public function __construct(Client $client)
     {
-        $this->guzzle = $guzzle;
+        $this->client = $client;
     }
 
     /**
