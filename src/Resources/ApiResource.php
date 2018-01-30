@@ -25,13 +25,17 @@ abstract class ApiResource implements ArrayAccess
         $this->shopify = $shopify;
     }
 
+    /**
+     * @param  string $key
+     * @return mixed
+     */
     public function __get($key)
     {
         if (array_key_exists($key, $this->attributes)) {
-            return $this->attributes[$key];
+            return $this->getAttribute($key);
         }
 
-        throw new Exception('Bad key');
+        throw new Exception('Property ' . $key . ' does not exist on ' . get_called_class());
     }
 
     /**
@@ -53,7 +57,7 @@ abstract class ApiResource implements ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->attributes[$offset];
+        return $this->getAttribute($offset);
     }
 
     /**
@@ -65,7 +69,7 @@ abstract class ApiResource implements ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        $this->attributes[$offset] = $value;
+        return $this->setAttribute($offset, $value);
     }
 
     /**
@@ -77,5 +81,29 @@ abstract class ApiResource implements ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->attributes[$offset]);
+    }
+
+    /**
+     * Get an attribute.
+     *
+     * @param  string $key
+     * @return mixed
+     */
+    protected function getAttribute($key)
+    {
+        return $this->attributes[$key];
+    }
+
+    /**
+     * Set an attribute.
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    protected function setAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+
+        return $this;
     }
 }
