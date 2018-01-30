@@ -2,10 +2,19 @@
 
 The `signifly/shopify-php-sdk` package allows you to easily make requests to the Shopify API.
 
-Below is a small example of how to use it. For now it only supports private app credentials.
+Below is a small example of how to use it with the CredentialsProfile.
 
 ```php
-$shopify = new \Signifly\Shopify\Shopify('api-key', 'password', 'handle');
+use Signifly\Shopify\Shopify;
+use Signifly\Shopify\Profiles\CredentialsProfile;
+
+$shopify = new Shopify(
+    new CredentialsProfile(
+        env('SHOPIFY_API_KEY'),
+        env('SHOPIFY_PASSWORD'),
+        env('SHOPIFY_HANDLE')
+    )
+);
 
 // Retrieve all products
 $shopify->products()->all();
