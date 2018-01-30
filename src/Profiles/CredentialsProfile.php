@@ -54,7 +54,7 @@ class CredentialsProfile implements ProfileContract
             'headers' => [
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-            ]
+            ],
         ]);
     }
 
