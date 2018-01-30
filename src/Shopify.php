@@ -92,7 +92,7 @@ class Shopify
     public function __call($name, $arguments)
     {
         try {
-            return (new ActionFactory($name))->make($this);
+            return (new ActionFactory($name, $this))->make();
         } catch (Exception $e) {
             //
         }
