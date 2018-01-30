@@ -21,7 +21,7 @@
     </filter>
     <php>
         <env name="SHOPIFY_API_KEY" value="" />
-        <env name="SHOPIFY_API_SECRET" value="" />
+        <env name="SHOPIFY_PASSWORD" value="" />
         <env name="SHOPIFY_HANDLE" value="" />
     </php>
 </phpunit>
