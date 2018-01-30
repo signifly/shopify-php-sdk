@@ -20,7 +20,7 @@ $shopify = new Shopify(
 $shopify->products()->all();
 
 // Count all products
-$shopify->products()->cancel();
+$shopify->products()->count();
 
 // Update a product
 $shopify->products()->update($id, $data);
