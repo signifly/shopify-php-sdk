@@ -46,11 +46,7 @@ class Shopify
      */
     public function __construct(string $apiKey, string $apiSecret, string $handle, Client $client = null)
     {
-        $this->apiKey = $apiKey;
-
-        $this->apiSecret = $apiSecret;
-
-        $this->handle = $handle;
+        $this->setCredentials($apiKey, $apiSecret, $handle);
 
         $this->client = $client ?: new Client([
             'base_uri' => $this->getShopifyUrl(),
@@ -70,6 +66,22 @@ class Shopify
     protected function getShopifyUrl() : string
     {
         return "https://{$this->apiKey}:{$this->apiSecret}@{$this->handle}.myshopify.com/admin/";
+    }
+
+    /**
+     * Set the credentials on the Shopify instance.
+     *
+     * @param string $apiKey
+     * @param string $apiSecret
+     * @param string $handle
+     */
+    public function setCredentials($apiKey, $apiSecret, $handle) : self
+    {
+        $this->apiKey = $apiKey;
+        $this->apiSecret = $apiSecret;
+        $this->handle = $handle;
+
+        return $this;
     }
 
     /**
