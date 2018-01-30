@@ -5,6 +5,7 @@ namespace Signifly\Shopify\Actions;
 use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;
 use Illuminate\Support\Collection;
+use Signifly\Shopify\Resources\ApiResource;
 
 abstract class Action
 {
@@ -33,7 +34,9 @@ abstract class Action
     {
         $key = Str::singular($this->getResourceKey());
 
-        return $this->shopify->post($this->path(), [$key => $data]);
+        $response = $this->shopify->post($this->path(), [$key => $data]);
+
+        return $this->transformItem($response[$key], $this->getResourceClass());
     }
 
     public function destroy($id)
@@ -80,13 +83,24 @@ abstract class Action
      *
      * @param  array $collection
      * @param  string $class
-     * @param  array $extraData
-     * @return array
+     * @return Collection
      */
     protected function transformCollection(array $collection, string $class) : Collection
     {
         return collect($collection)->map(function ($attributes) use ($class) {
-            return new $class($attributes, $this->shopify);
+            return $this->transformItem($attributes, $class);
         });
+    }
+
+    /**
+     * Transform the item to the given class.
+     *
+     * @param  array $item
+     * @param  string $class
+     * @return array
+     */
+    protected function transformItem(array $attributes, string $class) : ApiResource
+    {
+        return new $class($attributes, $this->shopify);
     }
 }
