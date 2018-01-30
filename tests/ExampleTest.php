@@ -13,8 +13,13 @@ class ExampleTest extends TestCase
      */
     public function it_can_reach_the_shopify_api()
     {
-        $profile = new CredentialsProfile(env('SHOPIFY_API_KEY'), env('SHOPIFY_PASSWORD'), env('SHOPIFY_HANDLE'));
-        $shopify = new Shopify($profile);
+        $shopify = new Shopify(
+            new CredentialsProfile(
+                env('SHOPIFY_API_KEY'),
+                env('SHOPIFY_PASSWORD'),
+                env('SHOPIFY_HANDLE')
+            )
+        );
 
         $response = $shopify->products()->count();
 
