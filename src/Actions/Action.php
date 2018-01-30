@@ -31,7 +31,9 @@ abstract class Action
 
     public function create(array $data)
     {
-        return $this->shopify->post($this->path(), $data);
+        $key = Str::singular($this->getResourceKey());
+
+        return $this->shopify->post($this->path(), [$key => $data]);
     }
 
     public function destroy($id)
