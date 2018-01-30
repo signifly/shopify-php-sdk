@@ -6,13 +6,16 @@ use Signifly\Shopify\Shopify;
 
 class ExampleTest extends TestCase
 {
-        /** @test */
-        function it_can_reach_the_shopify_api()
-        {
-            $client = new Shopify(env('SHOPIFY_API_KEY'), env('SHOPIFY_API_SECRET'), env('SHOPIFY_HANDLE'));
+    /**
+     * @test
+     * @group integration
+     */
+    function it_can_reach_the_shopify_api()
+    {
+        $shopify = new Shopify(env('SHOPIFY_API_KEY'), env('SHOPIFY_API_SECRET'), env('SHOPIFY_HANDLE'));
 
-            $response = $client->products()->count();
+        $response = $shopify->products()->count();
 
-            $this->assertArrayHasKey('count', $response);
-        }
+        $this->assertArrayHasKey('count', $response);
+    }
 }
