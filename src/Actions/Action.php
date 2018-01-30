@@ -51,20 +51,17 @@ abstract class Action
 
     protected function getResourceClass()
     {
-        $class = class_basename(get_called_class());
-
-        return 'Signifly\\Shopify\\Resources\\' . substr($class, 0, -6) . 'Resource';
+        return "Signifly\\Shopify\\Resources\\{$this->getResourceString()}Resource";
     }
 
     protected function getResourceKey()
     {
-        $class = class_basename(get_called_class());
+        return Str::snake(Str::plural($this->getResourceString()));
+    }
 
-        return Str::snake(
-            Str::plural(
-                substr($class, 0, -6)
-            )
-        );
+    protected function getResourceString()
+    {
+        return substr(class_basename(get_called_class()), 0, -6);
     }
 
     protected function path($id = null, $appends = '', $prepends = '', $format = '.json')
