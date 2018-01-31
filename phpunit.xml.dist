@@ -24,4 +24,9 @@
         <env name="SHOPIFY_PASSWORD" value="" />
         <env name="SHOPIFY_HANDLE" value="" />
     </php>
+    <groups>
+        <exclude>
+            <group>integration</group>
+        </exclude>
+    </groups>
 </phpunit>

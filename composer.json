@@ -34,7 +34,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "test-integration": "vendor/bin/phpunit --group integration"
     },
     "config": {
         "sort-packages": true
