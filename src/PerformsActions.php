@@ -9,6 +9,11 @@ trait PerformsActions
         return $this->images()->with('products', $id);
     }
 
+    public function productMetafields($id)
+    {
+        return $this->metafields()->with('products', $id);
+    }
+
     public function productVariants($id)
     {
         return $this->variants()->with('products', $id);
