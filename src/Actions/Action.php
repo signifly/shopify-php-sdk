@@ -54,13 +54,17 @@ abstract class Action
         return $this->transformItemFromResponse($response);
     }
 
+    /**
+     * Destroy the specified resource.
+     *
+     * @param  [type] $id [description]
+     * @return void
+     */
     public function destroy($id)
     {
         $this->guardAgainstMissingParent('destroy');
 
-        $response = $this->shopify->delete($this->path($id));
-
-        return $this->transformItemFromResponse($response);
+        $this->shopify->delete($this->path($id));
     }
 
     public function find($id)
