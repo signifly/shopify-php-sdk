@@ -11,6 +11,7 @@ class Shopify
 {
     use PerformsActions;
     use MakesHttpRequests;
+    use VerifiesWebhooks;
 
     /**
      * The Guzzle HTTP Client instance.
