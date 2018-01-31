@@ -5,7 +5,7 @@ namespace Signifly\Shopify\Test\Feature;
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Test\TestCase;
 
-class ProductActionTest extends TestCase
+class ProductsTest extends TestCase
 {
     /**
      * @test
