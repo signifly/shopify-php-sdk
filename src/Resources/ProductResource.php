@@ -16,6 +16,6 @@ class ProductResource extends ApiResource
 
     public function variants()
     {
-        return $this->shopify->variants()->with($this->getResourceKey(), $this->id);
+        return $this->shopify->productVariants($this->id);
     }
 }
