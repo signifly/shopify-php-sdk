@@ -1,6 +1,6 @@
 <?php
 
-namespace Signifly\Shopify\Test\Feature\Actions;
+namespace Signifly\Shopify\Test\Feature;
 
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Test\TestCase;
