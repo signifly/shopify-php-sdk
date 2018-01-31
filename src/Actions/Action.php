@@ -47,32 +47,40 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('create');
 
-        $key = Str::singular($this->getResourceKey());
+        $response = $this->shopify->post($this->path(null, '', $this->parentPath()), [
+            $this->getSingularResourceKey() => $data,
+        ]);
 
-        $response = $this->shopify->post($this->path(null, '', $this->parentPath()), [$key => $data]);
-
-        return $this->transformItem($response[$key], $this->getResourceClass());
+        return $this->transformItemFromResponse($response);
     }
 
     public function destroy($id)
     {
         $this->guardAgainstMissingParent('destroy');
 
-        return $this->shopify->delete($this->path($id));
+        $response = $this->shopify->delete($this->path($id));
+
+        return $this->transformItemFromResponse($response);
     }
 
     public function find($id)
     {
         $this->guardAgainstMissingParent('find');
 
-        return $this->shopify->get($this->path());
+        $response = $this->shopify->get($this->path());
+
+        return $this->transformItemFromResponse($response);
     }
 
     public function update($id, array $data)
     {
         $this->guardAgainstMissingParent('update');
 
-        return $this->shopify->put($this->path($id), $data);
+        $response = $this->shopify->put($this->path($id), [
+            $this->getSingularResourceKey() => $data,
+        ]);
+
+        return $this->transformItemFromResponse($response);
     }
 
     public function with($parent, $parentId)
@@ -98,10 +106,15 @@ abstract class Action
         return substr(class_basename(get_called_class()), 0, -6);
     }
 
+    protected function getSingularResourceKey()
+    {
+        return Str::singular($this->getResourceKey());
+    }
+
     protected function guardAgainstMissingParent(string $methodName)
     {
         if ($this->requiresParent($methodName) && ! $this->hasParent()) {
-            throw new Exception('Requires parent');
+            throw new Exception($methodName . ' requires parent');
         }
     }
 
@@ -153,5 +166,16 @@ abstract class Action
     protected function transformItem(array $attributes, string $class) : ApiResource
     {
         return new $class($attributes, $this->shopify);
+    }
+
+    /**
+     * Transform item from response.
+     *
+     * @param  array $response
+     * @return \Signifly\Shopify\Resources\ApiResource
+     */
+    protected function transformItemFromResponse($response)
+    {
+        return $this->transformItem($response[$this->getSingularResourceKey()], $this->getResourceClass());
     }
 }
