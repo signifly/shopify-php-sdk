@@ -9,6 +9,7 @@ use Signifly\Shopify\Profiles\ProfileContract;
 
 class Shopify
 {
+    use PerformsActions;
     use MakesHttpRequests;
 
     /**
