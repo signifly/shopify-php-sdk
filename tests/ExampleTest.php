@@ -23,6 +23,6 @@ class ExampleTest extends TestCase
 
         $response = $shopify->products()->count();
 
-        $this->assertArrayHasKey('count', $response);
+        $this->assertInternalType('integer', $response);
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace Signifly\Shopify\Test;
+namespace Signifly\Shopify\Test\Feature\Actions;
 
 use Signifly\Shopify\Shopify;
+use Signifly\Shopify\Test\TestCase;
 
-class ProductsTest extends TestCase
+class ProductActionTest extends TestCase
 {
     /**
      * @test
@@ -12,7 +13,7 @@ class ProductsTest extends TestCase
     public function it_can_create_a_product()
     {
         $profile = $this->makeGuzzleMockHandlerProfile([
-            $this->makeGuzzleResponse(201, [], $this->getFixture('products.json')),
+            $this->makeGuzzleResponse(201, [], $this->getFixture('product.json')),
         ]);
         $shopify = new Shopify($profile);
 

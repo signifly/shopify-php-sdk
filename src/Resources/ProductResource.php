@@ -13,4 +13,9 @@ class ProductResource extends ApiResource
     {
         return $this->shopify->products()->update($this->id, $data);
     }
+
+    public function createVariant(array $data)
+    {
+        return $this->shopify->variants()->with($this->getResourceKey(), $this->id)->create($data);
+    }
 }

@@ -4,6 +4,7 @@ namespace Signifly\Shopify\Resources;
 
 use Exception;
 use ArrayAccess;
+use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;
 
 abstract class ApiResource implements ArrayAccess
@@ -105,5 +106,15 @@ abstract class ApiResource implements ArrayAccess
         $this->attributes[$key] = $value;
 
         return $this;
+    }
+
+    protected function getResourceKey()
+    {
+        return Str::snake(Str::plural($this->getResourceString()));
+    }
+
+    protected function getResourceString()
+    {
+        return substr(class_basename(get_called_class()), 0, -8);
     }
 }
