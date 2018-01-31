@@ -25,7 +25,7 @@ class ProductResourceTest extends TestCase
             'price' => '1.00',
         ];
 
-        $response = $product->createVariant($data);
+        $response = $product->variants()->create($data);
 
         $this->assertInstanceOf(VariantResource::class, $response);
         $this->assertSame(1070325021, $response->id);
