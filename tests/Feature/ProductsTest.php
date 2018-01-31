@@ -29,6 +29,6 @@ class ProductsTest extends TestCase
 
         $this->assertSame(1071559582, $response->id);
         $this->assertCount(1, $this->mockHistory);
-        $this->assertSame('products.json', $this->mockHistory[0]['request']->getUri()->getPath());
+        $this->assertSame('products.json', $this->getLatestMockHistoryPath());
     }
 }

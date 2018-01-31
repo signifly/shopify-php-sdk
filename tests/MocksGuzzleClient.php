@@ -33,4 +33,9 @@ trait MocksGuzzleClient
     {
         $this->mockHistory = [];
     }
+
+    protected function getLatestMockHistoryPath()
+    {
+        return $this->mockHistory[0]['request']->getUri()->getPath();
+    }
 }

@@ -46,6 +46,6 @@ class VariantActionTest extends TestCase
         $this->assertInstanceOf(VariantResource::class, $response);
         $this->assertSame(1070325021, $response->id);
         $this->assertCount(1, $this->mockHistory);
-        $this->assertSame('products/1234/variants.json', $this->mockHistory[0]['request']->getUri()->getPath());
+        $this->assertSame('products/1234/variants.json', $this->getLatestMockHistoryPath());
     }
 }
