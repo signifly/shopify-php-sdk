@@ -4,10 +4,10 @@ namespace Signifly\Shopify;
 
 trait VerifiesWebhooks
 {
-    public function verifyWebhook(string $hmacHeader, string $data, string $secret) : bool
+    public function verifyWebhook(string $signature, string $data, string $secret) : bool
     {
-        $calculatedHmac = base64_encode(hash_hmac('sha256', $data, $secret, true));
+        $computedSignature = base64_encode(hash_hmac('sha256', $data, $secret, true));
 
-        return hash_equals($hmacHeader, $calculatedHmac);
+        return hash_equals($signature, $computedSignature);
     }
 }
