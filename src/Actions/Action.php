@@ -71,7 +71,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('find');
 
-        $response = $this->shopify->get($this->path());
+        $response = $this->shopify->get($this->path($id));
 
         return $this->transformItemFromResponse($response);
     }
