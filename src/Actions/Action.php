@@ -38,7 +38,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('count');
 
-        $response = $this->shopify->get($this->path(null, 'count'));
+        $response = $this->shopify->get($this->path(null, 'count', $this->parentPath()));
 
         return $response['count'];
     }
