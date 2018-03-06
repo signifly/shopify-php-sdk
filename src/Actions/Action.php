@@ -29,7 +29,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('all');
 
-        $response = $this->shopify->get($this->path());
+        $response = $this->shopify->get($this->path(null, '', $this->parentPath()));
 
         return $this->transformCollection($response[$this->getResourceKey()], $this->getResourceClass());
     }
@@ -71,7 +71,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('find');
 
-        $response = $this->shopify->get($this->path($id));
+        $response = $this->shopify->get($this->path($id, '', $this->parentPath()));
 
         return $this->transformItemFromResponse($response);
     }
@@ -80,7 +80,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('update');
 
-        $response = $this->shopify->put($this->path($id), [
+        $response = $this->shopify->put($this->path($id, '', $this->parentPath()), [
             $this->getSingularResourceKey() => $data,
         ]);
 
