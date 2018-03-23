@@ -14,6 +14,11 @@ class ProductResource extends ApiResource
         return $this->shopify->products()->update($this->id, $data);
     }
 
+    public function images()
+    {
+        return $this->shopify->productImages($this->id);
+    }
+
     public function metafields()
     {
         return $this->shopify->productMetafields($this->id);
