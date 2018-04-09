@@ -64,7 +64,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('destroy');
 
-        $this->shopify->delete($this->path($id));
+        $this->shopify->delete($this->path($id, '', $this->parentPath()));
     }
 
     public function find($id)
