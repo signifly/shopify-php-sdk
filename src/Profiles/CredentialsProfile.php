@@ -65,6 +65,10 @@ class CredentialsProfile implements ProfileContract
      */
     protected function getShopifyUrl() : string
     {
+        if (! $this->domain) {
+            return '';
+        }
+
         return "https://{$this->apiKey}:{$this->password}@{$this->domain}/admin/";
     }
 }
