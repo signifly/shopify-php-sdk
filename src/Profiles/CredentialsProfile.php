@@ -21,24 +21,24 @@ class CredentialsProfile implements ProfileContract
     protected $password;
 
     /**
-     * The Shopify shop handle.
+     * The Shopify shop domain.
      *
      * @var string
      */
-    protected $handle;
+    protected $domain;
 
     /**
      * Set the credentials on the profile instance.
      *
      * @param string $apiKey
      * @param string $password
-     * @param string $handle
+     * @param string $domain
      */
-    public function __construct($apiKey, $password, $handle)
+    public function __construct($apiKey, $password, $domain)
     {
         $this->apiKey = $apiKey;
         $this->password = $password;
-        $this->handle = $handle;
+        $this->domain = $domain;
     }
 
     /**
@@ -65,6 +65,6 @@ class CredentialsProfile implements ProfileContract
      */
     protected function getShopifyUrl() : string
     {
-        return "https://{$this->apiKey}:{$this->password}@{$this->handle}.myshopify.com/admin/";
+        return "https://{$this->apiKey}:{$this->password}@{$this->domain}/admin/";
     }
 }
