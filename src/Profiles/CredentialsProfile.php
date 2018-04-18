@@ -3,6 +3,7 @@
 namespace Signifly\Shopify\Profiles;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 
 class CredentialsProfile implements ProfileContract
 {
@@ -28,17 +29,25 @@ class CredentialsProfile implements ProfileContract
     protected $domain;
 
     /**
+     * The HandlerStack for the Guzzle Client.
+     *
+     * @var \GuzzleHttp\HandlerStack
+     */
+    protected $handlerStack;
+
+    /**
      * Set the credentials on the profile instance.
      *
      * @param string $apiKey
      * @param string $password
      * @param string $domain
      */
-    public function __construct($apiKey, $password, $domain)
+    public function __construct($apiKey, $password, $domain, $handlerStack = null)
     {
         $this->apiKey = $apiKey;
         $this->password = $password;
         $this->domain = $domain;
+        $this->handlerStack = $handlerStack ?: HandlerStack::create();
     }
 
     /**
@@ -55,6 +64,7 @@ class CredentialsProfile implements ProfileContract
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ],
+            'handler' => $this->handlerStack,
         ]);
     }
 
@@ -70,5 +80,27 @@ class CredentialsProfile implements ProfileContract
         }
 
         return "https://{$this->apiKey}:{$this->password}@{$this->domain}/admin/";
+    }
+
+    /**
+     * Returns the handlerStack.
+     *
+     * @return \GuzzleHttp\HandlerStack
+     */
+    public function getHandlerStack()
+    {
+        return $this->handlerStack;
+    }
+
+    /**
+     * Sets the handlerStack.
+     *
+     * @param \GuzzleHttp\HandlerStack $handlerStack
+     */
+    public function setHandlerStack(HandlerStack $handlerStack)
+    {
+        $this->handlerStack = $handlerStack;
+
+        return $this;
     }
 }
