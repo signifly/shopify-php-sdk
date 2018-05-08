@@ -5,12 +5,7 @@ namespace Signifly\Shopify\Actions;
 class ImageAction extends Action
 {
     protected $requiresParent = [
-        'all',
-        'count',
-        'create',
-        'destroy',
-        'find',
-        'update',
+        '*',
     ];
 
     /**
