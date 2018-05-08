@@ -14,6 +14,16 @@ class ProductResource extends ApiResource
         return $this->shopify->products()->update($this->id, $data);
     }
 
+    public function publish()
+    {
+        return $this->update(['published' => true]);
+    }
+
+    public function unpublish()
+    {
+        return $this->update(['published' => false]);
+    }
+
     public function images()
     {
         return $this->shopify->productImages($this->id);
