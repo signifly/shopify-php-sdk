@@ -2,7 +2,7 @@
 
 The `signifly/shopify-php-sdk` package allows you to easily make requests to the Shopify API.
 
-Below is a small example of how to use it with the CredentialsProfile.
+Below is a small example of how to use it with the `CredentialsProfile`.
 
 ```php
 use Signifly\Shopify\Shopify;
@@ -17,13 +17,16 @@ $shopify = new Shopify(
 );
 
 // Retrieve all products
-$shopify->products()->all();
+$shopify->products()->all(); // returns a collection of ProductResource
 
 // Count all products
 $shopify->products()->count();
 
+// Find a product
+$resource = $shopify->products()->find($id); // returns a ProductResource
+
 // Update a product
-$shopify->products()->update($id, $data);
+$shopify->products()->update($id, $data); // returns a ProductResource
 
 // Delete a product
 $shopify->products()->destroy($id);
