@@ -143,6 +143,10 @@ abstract class Action
 
     protected function requiresParent(string $methodName)
     {
+        if (in_array('*', $this->requiresParent)) {
+            return true;
+        }
+
         return in_array($methodName, $this->requiresParent);
     }
 

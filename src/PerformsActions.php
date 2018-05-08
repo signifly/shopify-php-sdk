@@ -4,6 +4,11 @@ namespace Signifly\Shopify;
 
 trait PerformsActions
 {
+    public function orderFulfillments($id)
+    {
+        return $this->fulfillments()->with('orders', $id);
+    }
+
     public function productImages($id)
     {
         return $this->images()->with('products', $id);
@@ -17,5 +22,10 @@ trait PerformsActions
     public function productVariants($id)
     {
         return $this->variants()->with('products', $id);
+    }
+
+    public function variantMetafields($id)
+    {
+        return $this->metafields()->with('variants', $id);
     }
 }
