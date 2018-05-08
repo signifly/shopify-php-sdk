@@ -4,6 +4,11 @@ namespace Signifly\Shopify;
 
 trait PerformsActions
 {
+    public function locationInventoryLevels($id)
+    {
+        return $this->inventoryLevels()->with('locations', $id);
+    }
+
     public function orderFulfillments($id)
     {
         return $this->fulfillments()->with('orders', $id);
