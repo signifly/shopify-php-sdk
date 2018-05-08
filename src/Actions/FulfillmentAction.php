@@ -12,7 +12,7 @@ class FulfillmentAction extends Action
     {
         $this->guardAgainstMissingParent('cancel');
 
-        $response = $this->shopify->post($this->path($id, 'cancel', $this->parentPath()));
+        $response = $this->shopify->post($this->path($id)->appends('cancel'));
 
         return $this->transformItemFromResponse($response);
     }
@@ -21,7 +21,7 @@ class FulfillmentAction extends Action
     {
         $this->guardAgainstMissingParent('complete');
 
-        $response = $this->shopify->post($this->path($id, 'complete', $this->parentPath()));
+        $response = $this->shopify->post($this->path($id)->appends('complete'));
 
         return $this->transformItemFromResponse($response);
     }
@@ -30,7 +30,7 @@ class FulfillmentAction extends Action
     {
         $this->guardAgainstMissingParent('open');
 
-        $response = $this->shopify->post($this->path($id, 'open', $this->parentPath()));
+        $response = $this->shopify->post($this->path($id)->appends('open'));
 
         return $this->transformItemFromResponse($response);
     }

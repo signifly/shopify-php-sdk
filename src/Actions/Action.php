@@ -29,7 +29,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('all');
 
-        $response = $this->shopify->get($this->path(null, '', $this->parentPath()));
+        $response = $this->shopify->get($this->path());
 
         return $this->transformCollection($response[$this->getResourceKey()], $this->getResourceClass());
     }
@@ -38,7 +38,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('count');
 
-        $response = $this->shopify->get($this->path(null, 'count', $this->parentPath()));
+        $response = $this->shopify->get($this->path()->appends('count'));
 
         return $response['count'];
     }
@@ -47,7 +47,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('create');
 
-        $response = $this->shopify->post($this->path(null, '', $this->parentPath()), [
+        $response = $this->shopify->post($this->path(), [
             $this->getSingularResourceKey() => $data,
         ]);
 
@@ -64,14 +64,14 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('destroy');
 
-        $this->shopify->delete($this->path($id, '', $this->parentPath()));
+        $this->shopify->delete($this->path($id));
     }
 
     public function find($id)
     {
         $this->guardAgainstMissingParent('find');
 
-        $response = $this->shopify->get($this->path($id, '', $this->parentPath()));
+        $response = $this->shopify->get($this->path($id));
 
         return $this->transformItemFromResponse($response);
     }
@@ -80,7 +80,7 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('update');
 
-        $response = $this->shopify->put($this->path($id, '', $this->parentPath()), [
+        $response = $this->shopify->put($this->path($id), [
             $this->getSingularResourceKey() => $data,
         ]);
 
@@ -132,15 +132,18 @@ abstract class Action
         return $this->hasParent() ? "{$this->parent}/{$this->parentId}" : "";
     }
 
-    protected function path($id = null, $appends = '', $prepends = '', $format = '.json')
+    protected function path($id = null)
     {
-        $path = collect([$prepends, $this->getResourceKey(), $id, $appends])
-            ->filter()
-            ->implode('/');
-
-        return $path . $format;
+        $path = (new Path($this->getResourceKey()))->prepends($this->parentPath());
+        return $id ? $path->id($id) : $path;
     }
 
+    /**
+     * Check if the action requires a parent resource.
+     *
+     * @param  string $methodName
+     * @return bool
+     */
     protected function requiresParent(string $methodName)
     {
         if (in_array('*', $this->requiresParent)) {
