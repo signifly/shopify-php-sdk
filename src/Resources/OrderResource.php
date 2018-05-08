@@ -28,4 +28,9 @@ class OrderResource extends ApiResource
     {
         return $this->shopify->orders()->open($this->id);
     }
+
+    public function fulfillments()
+    {
+        return $this->shopify->orderFulfillments($this->id);
+    }
 }
