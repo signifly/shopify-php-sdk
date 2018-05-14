@@ -25,11 +25,13 @@ abstract class Action
         $this->shopify = $shopify;
     }
 
-    public function all()
+    public function all(array $params = [])
     {
         $this->guardAgainstMissingParent('all');
 
-        $response = $this->shopify->get($this->path());
+        $path = count($params) > 0 ? $this->path() . '?' . http_build_query($params) : $this->path();
+
+        $response = $this->shopify->get($path);
 
         return $this->transformCollection($response[$this->getResourceKey()], $this->getResourceClass());
     }
