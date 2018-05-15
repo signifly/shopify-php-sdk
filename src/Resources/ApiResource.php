@@ -108,6 +108,16 @@ abstract class ApiResource implements ArrayAccess
         return $this;
     }
 
+    /**
+     * Get attributes for the resource.
+     *
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
     protected function getResourceKey()
     {
         return Str::snake(Str::plural($this->getResourceString()));
