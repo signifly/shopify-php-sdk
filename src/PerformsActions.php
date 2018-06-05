@@ -14,6 +14,11 @@ trait PerformsActions
         return $this->fulfillments()->with('orders', $id);
     }
 
+    public function orderTransactions($id)
+    {
+        return $this->transactions()->with('orders', $id);
+    }
+
     public function productImages($id)
     {
         return $this->images()->with('products', $id);

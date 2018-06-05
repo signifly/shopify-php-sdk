@@ -33,4 +33,9 @@ class OrderResource extends ApiResource
     {
         return $this->shopify->orderFulfillments($this->id);
     }
+
+    public function transactions()
+    {
+        return $this->shopify->orderTransactions($this->id);
+    }
 }
