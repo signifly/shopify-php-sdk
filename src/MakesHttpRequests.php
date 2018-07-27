@@ -78,7 +78,7 @@ trait MakesHttpRequests
     protected function handleRequestError(ResponseInterface $response)
     {
         if ($response->getStatusCode() === 422) {
-            throw new ValidationException(json_decode((string) $response->getBody(), true));
+            throw new ValidationException(json_decode((string) $response->getBody(), true) ?? []);
         }
 
         if ($response->getStatusCode() === 404) {
