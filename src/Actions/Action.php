@@ -29,18 +29,20 @@ abstract class Action
     {
         $this->guardAgainstMissingParent('all');
 
-        $path = count($params) > 0 ? $this->path() . '?' . http_build_query($params) : $this->path();
-
-        $response = $this->shopify->get($path);
+        $response = $this->shopify->get(
+            $this->path()->withParams($params)
+        );
 
         return $this->transformCollection($response[$this->getResourceKey()], $this->getResourceClass());
     }
 
-    public function count()
+    public function count(array $params = [])
     {
         $this->guardAgainstMissingParent('count');
 
-        $response = $this->shopify->get($this->path()->appends('count'));
+        $response = $this->shopify->get(
+            $this->path()->appends('count')->withParams($params)
+        );
 
         return $response['count'];
     }

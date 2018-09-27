@@ -18,6 +18,8 @@ class Path
 
     protected $id;
 
+    protected $params = [];
+
     protected $prepends;
 
     protected $resourceKey;
@@ -36,7 +38,7 @@ class Path
      * String to append to path.
      *
      * @param  string $appends
-     * @return Path
+     * @return self
      */
     public function appends(string $appends) : self
     {
@@ -61,14 +63,16 @@ class Path
             ->filter()
             ->implode('/');
 
-        return "{$path}.{$this->format}";
+        $uri = "{$path}.{$this->format}";
+
+        return $this->hasParams() ? $uri . '?' . http_build_query($this->params) : $uri;
     }
 
     /**
      * Set the return format.
      *
      * @param  string $format
-     * @return Path
+     * @return self
      */
     public function format(string $format) : self
     {
@@ -82,10 +86,20 @@ class Path
     }
 
     /**
+     * Checks if there are any params set.
+     *
+     * @return bool
+     */
+    public function hasParams()
+    {
+        return count($this->params) > 0;
+    }
+
+    /**
      * The resource identifier.
      *
      * @param  int $id
-     * @return Path
+     * @return self
      */
     public function id($id) : self
     {
@@ -98,11 +112,24 @@ class Path
      * String to prepend to path.
      *
      * @param  string $prepends
-     * @return Path
+     * @return self
      */
     public function prepends(string $prepends) : self
     {
         $this->prepends = $prepends;
+
+        return $this;
+    }
+
+    /**
+     * Set the params on the path.
+     *
+     * @param  array  $params
+     * @return self
+     */
+    public function withParams(array $params)
+    {
+        $this->params = $params;
 
         return $this;
     }
