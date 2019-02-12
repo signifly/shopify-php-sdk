@@ -65,7 +65,7 @@ class Path
 
         $uri = "{$path}.{$this->format}";
 
-        return $this->hasParams() ? $uri . '?' . http_build_query($this->params) : $uri;
+        return $this->hasParams() ? $uri.'?'.http_build_query($this->params) : $uri;
     }
 
     /**

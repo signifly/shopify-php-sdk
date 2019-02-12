@@ -10,6 +10,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function getFixture(string $filename)
     {
-        return file_get_contents(__DIR__ . '//fixtures//' . $filename);
+        return file_get_contents(__DIR__.'//fixtures//'.$filename);
     }
 }

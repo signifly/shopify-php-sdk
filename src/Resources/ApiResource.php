@@ -36,7 +36,7 @@ abstract class ApiResource implements ArrayAccess
             return $this->getAttribute($key);
         }
 
-        throw new Exception('Property ' . $key . ' does not exist on ' . get_called_class());
+        throw new Exception('Property '.$key.' does not exist on '.get_called_class());
     }
 
     /**

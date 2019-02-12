@@ -122,23 +122,24 @@ abstract class Action
     protected function guardAgainstMissingParent(string $methodName)
     {
         if ($this->requiresParent($methodName) && ! $this->hasParent()) {
-            throw new Exception($methodName . ' requires parent');
+            throw new Exception($methodName.' requires parent');
         }
     }
 
     protected function hasParent()
     {
-        return ($this->parent && $this->parentId);
+        return $this->parent && $this->parentId;
     }
 
     protected function parentPath()
     {
-        return $this->hasParent() ? "{$this->parent}/{$this->parentId}" : "";
+        return $this->hasParent() ? "{$this->parent}/{$this->parentId}" : '';
     }
 
     protected function path($id = null)
     {
         $path = (new Path($this->getResourceKey()))->prepends($this->parentPath());
+
         return $id ? $path->id($id) : $path;
     }
 

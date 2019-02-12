@@ -66,7 +66,7 @@ trait MakesHttpRequests
             empty($payload) ? [] : ['json' => $payload]
         );
 
-        if (!in_array($response->getStatusCode(), [200, 201])) {
+        if (! in_array($response->getStatusCode(), [200, 201])) {
             return $this->handleRequestError($response);
         }
 
