@@ -50,6 +50,7 @@ class DefaultRateLimitCalculator implements RateLimitCalculatorContract
     {
         $callPercentage = floatval($callsMade / $callsLimit);
         $limitPercentage = floatval(($callsLimit - $this->processes - $this->buffer) / $callsLimit);
-        return ($callPercentage > $limitPercentage ? ($this->processes * $this->cycle) : $this->cycle);
+
+        return $callPercentage > $limitPercentage ? ($this->processes * $this->cycle) : $this->cycle;
     }
 }

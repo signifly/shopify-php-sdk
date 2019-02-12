@@ -30,6 +30,6 @@ class ActionFactory
 
     protected function getQualifiedClassName()
     {
-        return __NAMESPACE__ . '\\' . Str::studly(Str::singular($this->resourceKey)) . 'Action';
+        return __NAMESPACE__.'\\'.Str::studly(Str::singular($this->resourceKey)).'Action';
     }
 }
