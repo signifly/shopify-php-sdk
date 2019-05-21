@@ -2,6 +2,8 @@
 
 namespace Signifly\Shopify;
 
+use Signifly\Shopify\Resources\ShopResource;
+
 trait PerformsActions
 {
     public function locationInventoryLevels($id)
@@ -32,6 +34,13 @@ trait PerformsActions
     public function productVariants($id)
     {
         return $this->variants()->with('products', $id);
+    }
+
+    public function shop()
+    {
+        $response = $this->get('shop.json');
+
+        return new ShopResource($response['shop'], $this);
     }
 
     public function variantMetafields($id)
