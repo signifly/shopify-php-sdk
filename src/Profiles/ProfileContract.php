@@ -6,5 +6,5 @@ use GuzzleHttp\Client;
 
 interface ProfileContract
 {
-    public function getClient() : Client;
+    public function getClient(): Client;
 }

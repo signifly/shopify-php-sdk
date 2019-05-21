@@ -12,9 +12,11 @@ trait MocksGuzzleClient
 {
     protected $mockHistory = null;
 
-    protected function makeGuzzleResponse(int $status = 200, array $headers = [],
-        string $body = null)
-    {
+    protected function makeGuzzleResponse(
+        int $status = 200,
+        array $headers = [],
+        string $body = null
+    ) {
         return new Response($status, $headers, $body);
     }
 
