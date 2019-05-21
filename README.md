@@ -12,7 +12,8 @@ $shopify = new Shopify(
     new CredentialsProfile(
         env('SHOPIFY_API_KEY'),
         env('SHOPIFY_PASSWORD'),
-        env('SHOPIFY_DOMAIN')
+        env('SHOPIFY_DOMAIN'),
+        env('SHOPIFY_API_VERSION')
     )
 );
 
