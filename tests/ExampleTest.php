@@ -3,6 +3,7 @@
 namespace Signifly\Shopify\Test;
 
 use Signifly\Shopify\Shopify;
+use Signifly\Shopify\Resources\ShopResource;
 use Signifly\Shopify\Profiles\CredentialsProfile;
 
 class ExampleTest extends TestCase
@@ -22,8 +23,8 @@ class ExampleTest extends TestCase
             )
         );
 
-        $response = $shopify->get('shop.json');
+        $shopResource = $shopify->shop();
 
-        $this->assertArrayHasKey('shop', $response);
+        $this->assertInstanceOf(ShopResource::class, $shopResource);
     }
 }
