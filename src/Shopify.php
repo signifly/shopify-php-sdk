@@ -4,7 +4,7 @@ namespace Signifly\Shopify;
 
 use Exception;
 use GuzzleHttp\Client;
-use Signifly\Shopify\Actions\ActionFactory;
+use Signifly\Shopify\Support\ActionFactory;
 use Signifly\Shopify\Profiles\ProfileContract;
 
 class Shopify
@@ -52,11 +52,11 @@ class Shopify
     public function __call($name, $arguments)
     {
         try {
-            return (new ActionFactory($name, $this))->make();
+            return ActionFactory::make($name, $this);
         } catch (Exception $e) {
             //
         }
 
-        throw new Exception("Method {$name} does not exist");
+        throw new Exception(sprintf('Method %s does not exist', $name));
     }
 }
