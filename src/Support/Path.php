@@ -1,6 +1,6 @@
 <?php
 
-namespace Signifly\Shopify\Actions;
+namespace Signifly\Shopify\Support;
 
 use Exception;
 
