@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;
 use Illuminate\Support\Collection;
+use Signifly\Shopify\Support\Path;
 use Signifly\Shopify\Resources\ApiResource;
 
 abstract class Action
@@ -25,7 +26,7 @@ abstract class Action
         $this->shopify = $shopify;
     }
 
-    public function all(array $params = [])
+    public function all(array $params = []): Collection
     {
         $this->guardAgainstMissingParent('all');
 
@@ -36,7 +37,7 @@ abstract class Action
         return $this->transformCollection($response[$this->getResourceKey()], $this->getResourceClass());
     }
 
-    public function count(array $params = [])
+    public function count(array $params = []): int
     {
         $this->guardAgainstMissingParent('count');
 
@@ -44,10 +45,10 @@ abstract class Action
             $this->path()->appends('count')->withParams($params)
         );
 
-        return $response['count'];
+        return $response['count'] ?? 0;
     }
 
-    public function create(array $data)
+    public function create(array $data): ApiResource
     {
         $this->guardAgainstMissingParent('create');
 
@@ -58,20 +59,14 @@ abstract class Action
         return $this->transformItemFromResponse($response);
     }
 
-    /**
-     * Destroy the specified resource.
-     *
-     * @param  [type] $id [description]
-     * @return void
-     */
-    public function destroy($id)
+    public function destroy($id): void
     {
         $this->guardAgainstMissingParent('destroy');
 
         $this->shopify->delete($this->path($id));
     }
 
-    public function find($id)
+    public function find($id): ApiResource
     {
         $this->guardAgainstMissingParent('find');
 
@@ -80,7 +75,7 @@ abstract class Action
         return $this->transformItemFromResponse($response);
     }
 
-    public function update($id, array $data)
+    public function update($id, array $data): ApiResource
     {
         $this->guardAgainstMissingParent('update');
 
@@ -91,7 +86,7 @@ abstract class Action
         return $this->transformItemFromResponse($response);
     }
 
-    public function with($parent, $parentId)
+    public function with($parent, $parentId): self
     {
         $this->parent = $parent;
         $this->parentId = $parentId;
@@ -99,44 +94,44 @@ abstract class Action
         return $this;
     }
 
-    protected function getResourceClass()
+    protected function getResourceClass(): string
     {
         return "Signifly\\Shopify\\Resources\\{$this->getResourceString()}Resource";
     }
 
-    protected function getResourceKey()
+    protected function getResourceKey(): string
     {
         return Str::snake(Str::plural($this->getResourceString()));
     }
 
-    protected function getResourceString()
+    protected function getResourceString(): string
     {
         return substr(class_basename(get_called_class()), 0, -6);
     }
 
-    protected function getSingularResourceKey()
+    protected function getSingularResourceKey(): string
     {
         return Str::singular($this->getResourceKey());
     }
 
-    protected function guardAgainstMissingParent(string $methodName)
+    protected function guardAgainstMissingParent(string $methodName): void
     {
         if ($this->requiresParent($methodName) && ! $this->hasParent()) {
             throw new Exception($methodName.' requires parent');
         }
     }
 
-    protected function hasParent()
+    protected function hasParent(): bool
     {
         return $this->parent && $this->parentId;
     }
 
-    protected function parentPath()
+    protected function parentPath(): string
     {
         return $this->hasParent() ? "{$this->parent}/{$this->parentId}" : '';
     }
 
-    protected function path($id = null)
+    protected function path($id = null): Path
     {
         $path = (new Path($this->getResourceKey()))->prepends($this->parentPath());
 
@@ -149,7 +144,7 @@ abstract class Action
      * @param  string $methodName
      * @return bool
      */
-    protected function requiresParent(string $methodName)
+    protected function requiresParent(string $methodName): bool
     {
         if (in_array('*', $this->requiresParent)) {
             return true;
@@ -165,7 +160,7 @@ abstract class Action
      * @param  string $class
      * @return Collection
      */
-    protected function transformCollection(array $collection, string $class) : Collection
+    protected function transformCollection(array $collection, string $class): Collection
     {
         return collect($collection)->map(function ($attributes) use ($class) {
             return $this->transformItem($attributes, $class);
@@ -179,7 +174,7 @@ abstract class Action
      * @param  string $class
      * @return array
      */
-    protected function transformItem(array $attributes, string $class) : ApiResource
+    protected function transformItem(array $attributes, string $class): ApiResource
     {
         return new $class($attributes, $this->shopify);
     }
@@ -190,7 +185,7 @@ abstract class Action
      * @param  array $response
      * @return \Signifly\Shopify\Resources\ApiResource
      */
-    protected function transformItemFromResponse($response)
+    protected function transformItemFromResponse($response): ApiResource
     {
         return $this->transformItem($response[$this->getSingularResourceKey()], $this->getResourceClass());
     }
