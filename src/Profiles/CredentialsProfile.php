@@ -15,6 +15,13 @@ class CredentialsProfile implements ProfileContract
     protected $apiKey;
 
     /**
+     * The API version to use when making requests.
+     *
+     * @var string
+     */
+    protected $apiVersion;
+
+    /**
      * The API password for Shopify private app.
      *
      * @var string
@@ -42,11 +49,17 @@ class CredentialsProfile implements ProfileContract
      * @param string $password
      * @param string $domain
      */
-    public function __construct($apiKey, $password, $domain, $handlerStack = null)
-    {
+    public function __construct(
+        string $apiKey,
+        string $password,
+        string $domain,
+        string $apiVersion,
+        ?HandlerStack $handlerStack = null
+    ) {
         $this->apiKey = $apiKey;
         $this->password = $password;
         $this->domain = $domain;
+        $this->apiVersion = $apiVersion;
         $this->handlerStack = $handlerStack ?: HandlerStack::create();
     }
 
@@ -55,7 +68,7 @@ class CredentialsProfile implements ProfileContract
      *
      * @return \GuzzleHttp\Client
      */
-    public function getClient() : Client
+    public function getClient(): Client
     {
         return new Client([
             'base_uri' => $this->getShopifyUrl(),
@@ -73,13 +86,18 @@ class CredentialsProfile implements ProfileContract
      *
      * @return string
      */
-    protected function getShopifyUrl() : string
+    protected function getShopifyUrl(): string
     {
         if (! $this->domain) {
             return '';
         }
 
-        return "https://{$this->apiKey}:{$this->password}@{$this->domain}/admin/";
+        return vsprintf('https://%s:%s@%s/admin/api/%s/', [
+            $this->apiKey,
+            $this->password,
+            $this->domain,
+            $this->apiVersion,
+        ]);
     }
 
     /**
