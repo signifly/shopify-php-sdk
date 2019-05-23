@@ -55,6 +55,6 @@ class ActionFactory
      */
     protected function getQualifiedClassName(): string
     {
-        return __NAMESPACE__.'\\'.Str::studly(Str::singular($this->resourceKey)).'Action';
+        return 'Signifly\\Shopify\\Actions\\'.Str::studly(Str::singular($this->resourceKey)).'Action';
     }
 }
