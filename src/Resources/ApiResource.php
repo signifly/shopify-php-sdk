@@ -4,6 +4,7 @@ namespace Signifly\Shopify\Resources;
 
 use Exception;
 use ArrayAccess;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;
 
@@ -24,6 +25,28 @@ abstract class ApiResource implements ArrayAccess
         $this->attributes = $attributes;
 
         $this->shopify = $shopify;
+    }
+
+    /**
+     * Get all of the attributes except for a specified array of keys.
+     *
+     * @param  array|string $keys
+     * @return array
+     */
+    public function except($keys): array
+    {
+        return Arr::except($this->getAttributes(), is_array($keys) ? $keys : func_get_args());
+    }
+
+    /**
+     * Get a subset of the attributes.
+     *
+     * @param  array|string $keys
+     * @return array
+     */
+    public function only($keys): array
+    {
+        return Arr::only($this->getAttributes(), is_array($keys) ? $keys : func_get_args());
     }
 
     /**
