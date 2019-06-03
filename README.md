@@ -17,7 +17,7 @@ $shopify = new Shopify(
     )
 );
 
-// Retrieve all products
+// Retrieve a list of products
 $shopify->products()->all(); // returns a collection of ProductResource
 
 // Count all products
@@ -34,7 +34,7 @@ $shopify->products()->destroy($id);
 ```
 
 ## Documentation
-Until further documentation is provided, please have a look at the tests.
+To get started follow the installation instructions below.
 
 ## Installation
 
@@ -42,6 +42,69 @@ You can install the package via composer:
 
 ```bash
 $ composer require signifly/shopify-php-sdk
+```
+
+## Reference
+
+A list of the available methods on the Shopify API client. The examples below assumes you have knowledge of how to make valid requests to the Shopify API. 
+
+If you want to learn more about what options are available when making a request, please refer to [Shopify's documentation](https://help.shopify.com/en/api/reference).
+
+### Products
+
+**Retrieve a list of products**
+
+```php
+$shopify->products()->all([
+    'page' => 1,
+    'limit' => 250,
+]);
+
+// returns a collection of ProductResource
+```
+
+*NOTE:* There's a max limit of 250 items per request.
+
+**Retrieve a count of products**
+
+```php
+$shopify->products()->count(); // returns an integer
+```
+
+**Retrieve a single product**
+
+```php
+$shopify->products()->find(123456789); // returns a ProductResource
+```
+
+**Create a new product**
+
+```php
+$shopify->products()->create([
+    'title' => 'Burton Custom Freestyle 151',
+    'body_html' => '<strong>Good snowboard!</strong>',
+    'vendor' => 'Burton',
+    'product_type' => 'Snowboard',
+    'tags' => 'Barnes & Noble, John\'s Fav, "Big Air"',
+]);
+
+// returns a ProductResource
+```
+
+**Update a product**
+
+```php
+$shopify->products()->update(123456789, [
+    'title' => 'An updated title',
+]);
+
+// returns a ProductResource
+```
+
+**Delete a product**
+
+```php
+$shopify->products()->destroy(123456789); // returns void
 ```
 
 ## Testing
