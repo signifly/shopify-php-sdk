@@ -70,7 +70,7 @@ abstract class ApiResource implements ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return ! array_key_exists($this->attributes[$offset]);
+        return array_key_exists($offset, $this->attributes);
     }
 
     /**
