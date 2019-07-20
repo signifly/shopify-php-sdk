@@ -11,8 +11,6 @@ use Signifly\Shopify\Resources\ApiResource;
 
 abstract class Action
 {
-    protected $guarded = [];
-
     protected $parent;
 
     protected $parentId;
@@ -34,7 +32,10 @@ abstract class Action
             $this->path()->withParams($params)
         );
 
-        return $this->transformCollection($response[$this->getResourceKey()], $this->getResourceClass());
+        return $this->transformCollection(
+            $response[$this->getResourceKey()],
+            $this->getResourceClass()
+        );
     }
 
     public function count(array $params = []): int
@@ -187,6 +188,9 @@ abstract class Action
      */
     protected function transformItemFromResponse($response): ApiResource
     {
-        return $this->transformItem($response[$this->getSingularResourceKey()], $this->getResourceClass());
+        return $this->transformItem(
+            $response[$this->getSingularResourceKey()],
+            $this->getResourceClass()
+        );
     }
 }
