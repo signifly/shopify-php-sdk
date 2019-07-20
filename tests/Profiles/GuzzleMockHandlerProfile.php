@@ -1,9 +1,10 @@
 <?php
 
-namespace Signifly\Shopify\Profiles;
+namespace Signifly\Shopify\Test\Profiles;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+use Signifly\Shopify\Profiles\ProfileContract;
 
 class GuzzleMockHandlerProfile implements ProfileContract
 {
@@ -29,7 +30,7 @@ class GuzzleMockHandlerProfile implements ProfileContract
      *
      * @return \GuzzleHttp\Client
      */
-    public function getClient() : Client
+    public function getClient(): Client
     {
         return new Client([
             'http_errors' => false,
