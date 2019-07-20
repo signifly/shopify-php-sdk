@@ -11,13 +11,33 @@ use Signifly\Shopify\Resources\ApiResource;
 
 abstract class Action
 {
+    /**
+     * The parent resource key.
+     *
+     * @var string
+     */
     protected $parent;
 
+    /**
+     * The parent resource id.
+     *
+     * @var int
+     */
     protected $parentId;
 
-    protected $shopify;
-
+    /**
+     * The actions that require a parent.
+     *
+     * @var array
+     */
     protected $requiresParent = [];
+
+    /**
+     * The shopify client.
+     *
+     * @var \Signifly\Shopify\Shopify
+     */
+    protected $shopify;
 
     public function __construct(Shopify $shopify)
     {
