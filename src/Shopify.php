@@ -4,6 +4,7 @@ namespace Signifly\Shopify;
 
 use Exception;
 use GuzzleHttp\Client;
+use Signifly\Shopify\Support\ResourceKey;
 use Signifly\Shopify\Support\ActionFactory;
 use Signifly\Shopify\Profiles\ProfileContract;
 
@@ -37,7 +38,7 @@ class Shopify
      * @param  ProfileContract $profile
      * @return self
      */
-    public function swap(ProfileContract $profile) : self
+    public function swap(ProfileContract $profile): self
     {
         $this->client = $profile->getClient();
 
@@ -52,7 +53,7 @@ class Shopify
     public function __call($name, $arguments)
     {
         try {
-            return ActionFactory::make($name, $this);
+            return ActionFactory::make(new ResourceKey($name), $this);
         } catch (Exception $e) {
             //
         }

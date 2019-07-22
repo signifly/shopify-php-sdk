@@ -2,20 +2,19 @@
 
 namespace Signifly\Shopify\Support;
 
-use Exception;
-use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Actions\Action;
+use Signifly\Shopify\Exceptions\InvalidActionException;
 
 class ActionFactory
 {
-    /** @var string */
+    /** @var \Signifly\Shopify\ResourceKey */
     protected $resourceKey;
 
     /** @var \Signifly\Shopify\Shopify */
     protected $shopify;
 
-    public function __construct(string $resourceKey, Shopify $shopify)
+    public function __construct(ResourceKey $resourceKey, Shopify $shopify)
     {
         $this->resourceKey = $resourceKey;
         $this->shopify = $shopify;
@@ -42,7 +41,7 @@ class ActionFactory
         $class = $this->getQualifiedClassName();
 
         if (! class_exists($class)) {
-            throw new Exception(sprintf('Action `%s` does not exist', $class));
+            throw InvalidActionException::doesNotExist($class);
         }
 
         return new $class($this->shopify);
@@ -55,6 +54,6 @@ class ActionFactory
      */
     protected function getQualifiedClassName(): string
     {
-        return 'Signifly\\Shopify\\Actions\\'.Str::studly(Str::singular($this->resourceKey)).'Action';
+        return 'Signifly\\Shopify\\Actions\\'.$this->resourceKey->className().'Action';
     }
 }
