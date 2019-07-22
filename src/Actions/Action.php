@@ -2,12 +2,12 @@
 
 namespace Signifly\Shopify\Actions;
 
-use Exception;
 use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;
 use Illuminate\Support\Collection;
 use Signifly\Shopify\Support\Path;
 use Signifly\Shopify\Resources\ApiResource;
+use Signifly\Shopify\Exceptions\InvalidActionException;
 
 abstract class Action
 {
@@ -80,6 +80,12 @@ abstract class Action
         return $this->transformItemFromResponse($response);
     }
 
+    /** Alias of self::destroy() */
+    public function delete($id): void
+    {
+        $this->destroy($id);
+    }
+
     public function destroy($id): void
     {
         $this->guardAgainstMissingParent('destroy');
@@ -94,6 +100,12 @@ abstract class Action
         $response = $this->shopify->get($this->path($id));
 
         return $this->transformItemFromResponse($response);
+    }
+
+    /** Alias of self::all() */
+    public function get(array $params = []): Collection
+    {
+        return $this->all($params);
     }
 
     public function update($id, array $data): ApiResource
@@ -138,7 +150,7 @@ abstract class Action
     protected function guardAgainstMissingParent(string $methodName): void
     {
         if ($this->requiresParent($methodName) && ! $this->hasParent()) {
-            throw new Exception($methodName.' requires parent');
+            throw InvalidActionException::requiresParent(static::class, $methodName);
         }
     }
 
