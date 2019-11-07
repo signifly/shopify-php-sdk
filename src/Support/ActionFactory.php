@@ -2,9 +2,9 @@
 
 namespace Signifly\Shopify\Support;
 
-use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Actions\Action;
 use Signifly\Shopify\Exceptions\InvalidActionException;
+use Signifly\Shopify\Shopify;
 
 class ActionFactory
 {

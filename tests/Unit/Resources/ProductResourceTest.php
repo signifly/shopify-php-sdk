@@ -2,10 +2,10 @@
 
 namespace Signifly\Shopify\Test\Unit\Resources;
 
-use Signifly\Shopify\Shopify;
-use Signifly\Shopify\Test\TestCase;
 use Signifly\Shopify\Resources\ProductResource;
 use Signifly\Shopify\Resources\VariantResource;
+use Signifly\Shopify\Shopify;
+use Signifly\Shopify\Test\TestCase;
 
 class ProductResourceTest extends TestCase
 {

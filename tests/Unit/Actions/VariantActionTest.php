@@ -3,9 +3,9 @@
 namespace Signifly\Shopify\Test\Unit\Actions;
 
 use Exception;
+use Signifly\Shopify\Resources\VariantResource;
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Test\TestCase;
-use Signifly\Shopify\Resources\VariantResource;
 
 class VariantActionTest extends TestCase
 {

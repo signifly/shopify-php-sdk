@@ -2,8 +2,8 @@
 
 namespace Signifly\Shopify\Resources;
 
-use Exception;
 use ArrayAccess;
+use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Signifly\Shopify\Shopify;

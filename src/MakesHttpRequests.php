@@ -4,9 +4,9 @@ namespace Signifly\Shopify;
 
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use Signifly\Shopify\Exceptions\FailedActionException;
 use Signifly\Shopify\Exceptions\NotFoundException;
 use Signifly\Shopify\Exceptions\ValidationException;
-use Signifly\Shopify\Exceptions\FailedActionException;
 
 trait MakesHttpRequests
 {

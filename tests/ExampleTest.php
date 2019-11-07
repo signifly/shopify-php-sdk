@@ -2,9 +2,9 @@
 
 namespace Signifly\Shopify\Test;
 
-use Signifly\Shopify\Shopify;
-use Signifly\Shopify\Resources\ShopResource;
 use Signifly\Shopify\Profiles\CredentialsProfile;
+use Signifly\Shopify\Resources\ShopResource;
+use Signifly\Shopify\Shopify;
 
 class ExampleTest extends TestCase
 {

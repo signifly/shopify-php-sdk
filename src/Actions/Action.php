@@ -2,12 +2,12 @@
 
 namespace Signifly\Shopify\Actions;
 
-use Illuminate\Support\Str;
-use Signifly\Shopify\Shopify;
 use Illuminate\Support\Collection;
-use Signifly\Shopify\Support\Path;
-use Signifly\Shopify\Resources\ApiResource;
+use Illuminate\Support\Str;
 use Signifly\Shopify\Exceptions\InvalidActionException;
+use Signifly\Shopify\Resources\ApiResource;
+use Signifly\Shopify\Shopify;
+use Signifly\Shopify\Support\Path;
 
 abstract class Action
 {

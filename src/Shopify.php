@@ -4,9 +4,9 @@ namespace Signifly\Shopify;
 
 use Exception;
 use GuzzleHttp\Client;
-use Signifly\Shopify\Support\ResourceKey;
-use Signifly\Shopify\Support\ActionFactory;
 use Signifly\Shopify\Profiles\ProfileContract;
+use Signifly\Shopify\Support\ActionFactory;
+use Signifly\Shopify\Support\ResourceKey;
 
 class Shopify
 {
