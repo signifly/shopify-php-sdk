@@ -23,7 +23,7 @@ class ResourceKey
      */
     public function __construct(string $name)
     {
-        $this->name = Str::lower($name);
+        $this->name = $name;
     }
 
     /**
