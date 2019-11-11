@@ -78,6 +78,7 @@ class CredentialsProfile implements ProfileContract
                 'Content-Type' => 'application/json',
             ],
             'handler' => $this->handlerStack,
+            'auth' => [$this->apiKey, $this->password],
         ]);
     }
 
@@ -92,9 +93,7 @@ class CredentialsProfile implements ProfileContract
             return '';
         }
 
-        return vsprintf('https://%s:%s@%s/admin/api/%s/', [
-            $this->apiKey,
-            $this->password,
+        return vsprintf('https://%s/admin/api/%s/', [
             $this->domain,
             $this->apiVersion,
         ]);

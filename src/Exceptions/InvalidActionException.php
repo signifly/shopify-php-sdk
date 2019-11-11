@@ -13,6 +13,6 @@ class InvalidActionException extends Exception
 
     public static function requiresParent(string $className, string $methodName): self
     {
-        return new static(sprintf('%s::%s required a parent', $className, $methodName));
+        return new static(sprintf('%s::%s() requires a parent', $className, $methodName));
     }
 }

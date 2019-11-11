@@ -2,6 +2,7 @@
 
 namespace Signifly\Shopify;
 
+use BadMethodCallException;
 use Exception;
 use GuzzleHttp\Client;
 use Signifly\Shopify\Profiles\ProfileContract;
@@ -55,9 +56,12 @@ class Shopify
         try {
             return ActionFactory::make(new ResourceKey($name), $this);
         } catch (Exception $e) {
-            //
         }
 
-        throw new Exception(sprintf('Method %s does not exist', $name));
+        throw new BadMethodCallException(sprintf(
+            'Call to undefined method %s::%s()',
+            static::class,
+            $name
+        ));
     }
 }
