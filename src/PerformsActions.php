@@ -6,6 +6,11 @@ use Signifly\Shopify\Resources\ShopResource;
 
 trait PerformsActions
 {
+    public function collectionMetafields($id)
+    {
+        return $this->metafields()->with('collections', $id);
+    }
+
     public function locationInventoryLevels($id)
     {
         return $this->inventoryLevels()->with('locations', $id);
@@ -14,6 +19,11 @@ trait PerformsActions
     public function orderFulfillments($id)
     {
         return $this->fulfillments()->with('orders', $id);
+    }
+
+    public function orderMetafields($id)
+    {
+        return $this->metafields()->with('orders', $id);
     }
 
     public function orderTransactions($id)
@@ -36,7 +46,7 @@ trait PerformsActions
         return $this->variants()->with('products', $id);
     }
 
-    public function shop()
+    public function shop(): ShopResource
     {
         $response = $this->get('shop.json');
 
