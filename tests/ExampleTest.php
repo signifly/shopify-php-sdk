@@ -19,7 +19,7 @@ class ExampleTest extends TestCase
                 env('SHOPIFY_API_KEY'),
                 env('SHOPIFY_PASSWORD'),
                 env('SHOPIFY_DOMAIN'),
-                '2019-04'
+                '2019-10'
             )
         );
 
