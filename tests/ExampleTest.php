@@ -45,17 +45,15 @@ class ExampleTest extends TestCase
         );
 
         $count = $shopify->products()->count();
-        $cursor = $shopify->products()->paginate(['limit' => 250]);
+        $pages = $shopify->products()->paginate(['limit' => 250]);
 
         $results = collect();
 
-        while ($cursor->valid()) {
-            $results = $results->merge($cursor->current());
-
-            $cursor->next();
+        foreach ($pages as $page) {
+            $results = $results->merge($page);
         }
 
-        $this->assertInstanceOf(Cursor::class, $cursor);
+        $this->assertInstanceOf(Cursor::class, $pages);
         $this->assertEquals($count, $results->count());
     }
 }
