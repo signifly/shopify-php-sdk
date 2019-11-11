@@ -33,7 +33,7 @@ class ResourceKey
      */
     public function actionClassName(): string
     {
-        return "Signifly\\Shopify\\Actions\\{$this->resourceKey->studly()}Action";
+        return "Signifly\\Shopify\\Actions\\{$this->studly()}Action";
     }
 
     /**
