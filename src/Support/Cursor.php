@@ -3,11 +3,12 @@
 namespace Signifly\Shopify\Support;
 
 use Illuminate\Support\Collection;
+use Iterator;
 use RuntimeException;
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\TransformsResources;
 
-class Cursor
+class Cursor implements Iterator
 {
     use TransformsResources;
 
@@ -19,17 +20,20 @@ class Cursor
     /** @var \Signifly\Shopify\Support\ResourceKey */
     protected $resourceKey;
 
-    /** @var array */
-    protected $response;
+    /** @var int */
+    protected $position = 0;
 
     /** @var array */
     protected $links = [];
+
+    /** @var array */
+    protected $results = [];
 
     public function __construct(Shopify $shopify, ResourceKey $resourceKey, array $response)
     {
         $this->shopify = $shopify;
         $this->resourceKey = $resourceKey;
-        $this->response = $response;
+        $this->results[$this->position] = $response;
 
         $this->extractLinks();
     }
@@ -41,7 +45,9 @@ class Cursor
      */
     public function current(): Collection
     {
-        return $this->transformCollectionFromResponse($this->response);
+        return $this->transformCollectionFromResponse(
+            $this->results[$this->position]
+        );
     }
 
     /**
@@ -61,45 +67,66 @@ class Cursor
      */
     public function hasPrev(): bool
     {
-        return ! empty($this->links['previous']);
+        return $this->position > 0;
+    }
+
+    /**
+     * Get the key of the iterator.
+     *
+     * @return scalar
+     */
+    public function key(): scalar
+    {
+        return $this->position;
     }
 
     /**
      * Get the next results from the cursor.
      *
-     * @return Collection
+     * @return void
      */
-    public function next(): Collection
+    public function next(): void
     {
-        if (! $this->hasNext()) {
-            throw new RuntimeException('No next results available.');
+        $this->position++;
+
+        if (! $this->valid() && $this->hasNext()) {
+            $this->results[$this->position] = $this->shopify->get($this->links['next']);
+            $this->extractLinks();
         }
-
-        $response = $this->shopify->get($this->links['next']);
-
-        $this->response = $response;
-        $this->extractLinks();
-
-        return $this->transformCollectionFromResponse($response);
     }
 
     /**
      * Get the previous results from the cursor.
      *
-     * @return Collection
+     * @return void
      */
-    public function prev(): Collection
+    public function prev(): void
     {
         if (! $this->hasPrev()) {
             throw new RuntimeException('No previous results available.');
         }
 
-        $response = $this->shopify->get($this->links['previous']);
+        $this->position--;
+    }
 
-        $this->response = $response;
-        $this->extractLinks();
+    /**
+     * Rewind the cursor/iterator.
+     *
+     * @return void
+     */
+    public function rewind(): void
+    {
+        $this->position = 0;
+    }
 
-        return $this->transformCollectionFromResponse($response);
+    /**
+     * Checks if current position is valid
+     *
+     * @return bool
+     */
+    public function valid(): bool
+    {
+        return isset($this->results[$this->position]);
     }
 
     /**
