@@ -71,7 +71,7 @@ class CredentialsProfile implements ProfileContract
     public function getClient(): Client
     {
         return new Client([
-            'base_uri' => $this->getShopifyUrl(),
+            'base_uri' => $this->getBaseUrl(),
             'http_errors' => false,
             'headers' => [
                 'Accept' => 'application/json',
@@ -87,7 +87,7 @@ class CredentialsProfile implements ProfileContract
      *
      * @return string
      */
-    protected function getShopifyUrl(): string
+    protected function getBaseUrl(): string
     {
         if (! $this->domain) {
             return '';
