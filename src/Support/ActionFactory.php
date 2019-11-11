@@ -38,22 +38,12 @@ class ActionFactory
      */
     public function create(): Action
     {
-        $class = $this->getQualifiedClassName();
+        $class = $this->resourceKey->actionClassName();
 
         if (! class_exists($class)) {
             throw InvalidActionException::doesNotExist($class);
         }
 
         return new $class($this->shopify, $this->resourceKey);
-    }
-
-    /**
-     * Get the qualified class name.
-     *
-     * @return string
-     */
-    protected function getQualifiedClassName(): string
-    {
-        return 'Signifly\\Shopify\\Actions\\'.$this->resourceKey->className().'Action';
     }
 }

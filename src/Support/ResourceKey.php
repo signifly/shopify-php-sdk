@@ -27,11 +27,21 @@ class ResourceKey
     }
 
     /**
+     * Get the action class name for the resource.
+     *
+     * @return string
+     */
+    public function actionClassName(): string
+    {
+        return "Signifly\\Shopify\\Actions\\{$this->resourceKey->studly()}Action";
+    }
+
+    /**
      * Get the resource key in a class name context.
      *
      * @return string
      */
-    public function className(): string
+    public function studly(): string
     {
         return Str::studly($this->singular());
     }
@@ -63,7 +73,7 @@ class ResourceKey
      */
     public function resourceClassName(): string
     {
-        return "Signifly\\Shopify\\Resources\\{$this->className()}Resource";
+        return "Signifly\\Shopify\\Resources\\{$this->studly()}Resource";
     }
 
     /**
