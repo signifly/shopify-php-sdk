@@ -3,11 +3,11 @@
 namespace Signifly\Shopify\Actions;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Signifly\Shopify\Exceptions\InvalidActionException;
 use Signifly\Shopify\Resources\ApiResource;
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Support\Path;
+use Signifly\Shopify\Support\ResourceKey;
 
 abstract class Action
 {
@@ -33,17 +33,37 @@ abstract class Action
     protected $requiresParent = [];
 
     /**
+     * The resource key of the action.
+     *
+     * @var \Signifly\Shopify\Support\ResourceKey
+     */
+    protected $resourceKey;
+
+    /**
      * The shopify client.
      *
      * @var \Signifly\Shopify\Shopify
      */
     protected $shopify;
 
-    public function __construct(Shopify $shopify)
+    /**
+     * Create a new Action.
+     *
+     * @param \Signifly\Shopify\Shopify     $shopify
+     * @param \Signifly\Shopify\Support\ResourceKey $resourceKey
+     */
+    public function __construct(Shopify $shopify, ResourceKey $resourceKey)
     {
         $this->shopify = $shopify;
+        $this->resourceKey = $resourceKey;
     }
 
+    /**
+     * Retrieve all resources (paginated due to limit).
+     *
+     * @param  array  $params
+     * @return Collection
+     */
     public function all(array $params = []): Collection
     {
         $this->guardAgainstMissingParent('all');
@@ -53,11 +73,17 @@ abstract class Action
         );
 
         return $this->transformCollection(
-            $response[$this->getResourceKey()],
-            $this->getResourceClass()
+            $response[$this->resourceKey->plural()],
+            $this->resourceKey->resourceClassName()
         );
     }
 
+    /**
+     * Count all the resources.
+     *
+     * @param  array  $params
+     * @return int
+     */
     public function count(array $params = []): int
     {
         $this->guardAgainstMissingParent('count');
@@ -69,6 +95,12 @@ abstract class Action
         return $response['count'] ?? 0;
     }
 
+    /**
+     * Create a resource.
+     *
+     * @param  array  $data
+     * @return ApiResource
+     */
     public function create(array $data): ApiResource
     {
         $this->guardAgainstMissingParent('create');
@@ -86,6 +118,12 @@ abstract class Action
         $this->destroy($id);
     }
 
+    /**
+     * Destroy a resource.
+     *
+     * @param  int|string $id
+     * @return void
+     */
     public function destroy($id): void
     {
         $this->guardAgainstMissingParent('destroy');
@@ -93,6 +131,12 @@ abstract class Action
         $this->shopify->delete($this->path($id));
     }
 
+    /**
+     * Find a resource.
+     *
+     * @param  int|string $id
+     * @return ApiResource
+     */
     public function find($id): ApiResource
     {
         $this->guardAgainstMissingParent('find');
@@ -108,18 +152,32 @@ abstract class Action
         return $this->all($params);
     }
 
+    /**
+     * Update the resource.
+     *
+     * @param  int|string $id
+     * @param  array  $data
+     * @return ApiResource
+     */
     public function update($id, array $data): ApiResource
     {
         $this->guardAgainstMissingParent('update');
 
         $response = $this->shopify->put($this->path($id), [
-            $this->getSingularResourceKey() => $data,
+            $this->resourceKey->singular() => $data,
         ]);
 
         return $this->transformItemFromResponse($response);
     }
 
-    public function with($parent, $parentId): self
+    /**
+     * Set the parent and parentId.
+     *
+     * @param  string $parent
+     * @param  int|string $parentId
+     * @return self
+     */
+    public function with(string $parent, $parentId): self
     {
         $this->parent = $parent;
         $this->parentId = $parentId;
@@ -127,26 +185,12 @@ abstract class Action
         return $this;
     }
 
-    protected function getResourceClass(): string
-    {
-        return "Signifly\\Shopify\\Resources\\{$this->getResourceString()}Resource";
-    }
-
-    protected function getResourceKey(): string
-    {
-        return Str::snake(Str::plural($this->getResourceString()));
-    }
-
-    protected function getResourceString(): string
-    {
-        return substr(class_basename(get_called_class()), 0, -6);
-    }
-
-    protected function getSingularResourceKey(): string
-    {
-        return Str::singular($this->getResourceKey());
-    }
-
+    /**
+     * Guard against missing parent.
+     *
+     * @param  string $methodName
+     * @return void
+     */
     protected function guardAgainstMissingParent(string $methodName): void
     {
         if ($this->requiresParent($methodName) && ! $this->hasParent()) {
@@ -154,21 +198,37 @@ abstract class Action
         }
     }
 
+    /**
+     * Determine if the action has a parent.
+     *
+     * @return bool
+     */
     protected function hasParent(): bool
     {
         return $this->parent && $this->parentId;
     }
 
+    /**
+     * Get the parent path.
+     *
+     * @return string
+     */
     protected function parentPath(): string
     {
         return $this->hasParent() ? "{$this->parent}/{$this->parentId}" : '';
     }
 
+    /**
+     * Create a new path.
+     *
+     * @param  int|string|null $id
+     * @return \Signifly\Shopify\Support\Path
+     */
     protected function path($id = null): Path
     {
-        $path = (new Path($this->getResourceKey()))->prepends($this->parentPath());
-
-        return $id ? $path->id($id) : $path;
+        return Path::make($this->resourceKey)
+            ->prepends($this->parentPath())
+            ->id($id);
     }
 
     /**
@@ -221,8 +281,8 @@ abstract class Action
     protected function transformItemFromResponse($response): ApiResource
     {
         return $this->transformItem(
-            $response[$this->getSingularResourceKey()],
-            $this->getResourceClass()
+            $response[$this->resourceKey->singular()],
+            $this->resourceKey->resourceClassName()
         );
     }
 }

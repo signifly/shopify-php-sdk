@@ -2,36 +2,55 @@
 
 namespace Signifly\Shopify\Support;
 
-use Exception;
+use Signifly\Shopify\Exceptions\InvalidFormatException;
 
 class Path
 {
     const FORMAT_JSON = 'json';
+    const FORMAT_XML = 'xml';
 
     const VALID_FORMATS = [
         self::FORMAT_JSON,
+        self::FORMAT_XML,
     ];
 
+    /** @var string|null */
     protected $appends;
 
+    /** @var string */
     protected $format = self::FORMAT_JSON;
 
+    /** @var int|string */
     protected $id;
 
+    /** @var array */
     protected $params = [];
 
+    /** @var string|null */
     protected $prepends;
 
+    /** @var \Signifly\Shopify\Support\ResourceKey */
     protected $resourceKey;
 
     /**
      * Create a new Path instance.
      *
-     * @param string $resourceKey
+     * @param \Signifly\Shopify\Support\ResourceKey $resourceKey
      */
-    public function __construct(string $resourceKey)
+    public function __construct(ResourceKey $resourceKey)
     {
         $this->resourceKey = $resourceKey;
+    }
+
+    /**
+     * Instantiate a new Path.
+     *
+     * @param  array $args
+     * @return self
+     */
+    public static function make(...$args): self
+    {
+        return new self(...$args);
     }
 
     /**
@@ -40,7 +59,7 @@ class Path
      * @param  string $appends
      * @return self
      */
-    public function appends(string $appends) : self
+    public function appends(string $appends): self
     {
         $this->appends = $appends;
 
@@ -52,11 +71,11 @@ class Path
      *
      * @return string
      */
-    public function build() : string
+    public function build(): string
     {
         $path = collect([
                 $this->prepends,
-                $this->resourceKey,
+                $this->resourceKey->plural(),
                 $this->id,
                 $this->appends,
             ])
@@ -74,10 +93,10 @@ class Path
      * @param  string $format
      * @return self
      */
-    public function format(string $format) : self
+    public function format(string $format): self
     {
         if (! in_array($format, self::VALID_FORMATS)) {
-            throw new Exception('Invalid format provided to path.');
+            throw InvalidFormatException::for($format);
         }
 
         $this->format = $format;
@@ -90,7 +109,7 @@ class Path
      *
      * @return bool
      */
-    public function hasParams()
+    public function hasParams(): bool
     {
         return count($this->params) > 0;
     }
@@ -98,10 +117,10 @@ class Path
     /**
      * The resource identifier.
      *
-     * @param  int $id
+     * @param  int|string $id
      * @return self
      */
-    public function id($id) : self
+    public function id($id): self
     {
         $this->id = $id;
 
@@ -114,7 +133,7 @@ class Path
      * @param  string $prepends
      * @return self
      */
-    public function prepends(string $prepends) : self
+    public function prepends(string $prepends): self
     {
         $this->prepends = $prepends;
 
@@ -127,7 +146,7 @@ class Path
      * @param  array  $params
      * @return self
      */
-    public function withParams(array $params)
+    public function withParams(array $params): self
     {
         $this->params = $params;
 

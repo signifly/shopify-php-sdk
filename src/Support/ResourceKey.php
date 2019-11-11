@@ -23,7 +23,7 @@ class ResourceKey
      */
     public function __construct(string $name)
     {
-        $this->name = $name;
+        $this->name = Str::lower(Str::snake($name));
     }
 
     /**
@@ -44,6 +44,26 @@ class ResourceKey
     public function name(): string
     {
         return $this->name;
+    }
+
+    /**
+     * Get the plural name of the resurce key.
+     *
+     * @return string
+     */
+    public function plural(): string
+    {
+        return Str::plural($this->name);
+    }
+
+    /**
+     * Get the fully qualified class name for the resource.
+     *
+     * @return string
+     */
+    public function resourceClassName(): string
+    {
+        return "Signifly\\Shopify\\Resources\\{$this->className()}Resource";
     }
 
     /**

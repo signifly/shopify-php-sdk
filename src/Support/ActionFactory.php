@@ -44,7 +44,7 @@ class ActionFactory
             throw InvalidActionException::doesNotExist($class);
         }
 
-        return new $class($this->shopify);
+        return new $class($this->shopify, $this->resourceKey);
     }
 
     /**
