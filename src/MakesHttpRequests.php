@@ -6,10 +6,18 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Signifly\Shopify\Exceptions\FailedActionException;
 use Signifly\Shopify\Exceptions\NotFoundException;
+use Signifly\Shopify\Exceptions\TooManyRequestsException;
 use Signifly\Shopify\Exceptions\ValidationException;
 
 trait MakesHttpRequests
 {
+    /**
+     * The last response.
+     *
+     * @var \GuzzleHttp\Psr7\Response
+     */
+    protected $lastResponse;
+
     /**
      * @param  string $uri
      *
@@ -54,6 +62,16 @@ trait MakesHttpRequests
     }
 
     /**
+     * Get the last response.
+     *
+     * @return \GuzzleHttp\Psr7\Response
+     */
+    public function getLastResponse()
+    {
+        return $this->lastResponse;
+    }
+
+    /**
      * @param  string $verb
      * @param  string $uri
      * @param  array $payload
@@ -68,6 +86,8 @@ trait MakesHttpRequests
             empty($payload) ? [] : ['json' => $payload]
         );
 
+        $this->lastResponse = $response;
+
         if (! in_array($response->getStatusCode(), [200, 201])) {
             return $this->handleRequestError($response);
         }
@@ -79,6 +99,10 @@ trait MakesHttpRequests
 
     protected function handleRequestError(ResponseInterface $response)
     {
+        if ($response->getStatusCode() === 429) {
+            throw new TooManyRequestsException();
+        }
+
         if ($response->getStatusCode() === 422) {
             $errors = json_decode((string) $response->getBody(), true);
             throw new ValidationException(is_array($errors) ? $errors : []);
