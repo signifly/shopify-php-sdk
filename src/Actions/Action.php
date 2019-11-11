@@ -6,11 +6,15 @@ use Illuminate\Support\Collection;
 use Signifly\Shopify\Exceptions\InvalidActionException;
 use Signifly\Shopify\Resources\ApiResource;
 use Signifly\Shopify\Shopify;
+use Signifly\Shopify\Support\Cursor;
 use Signifly\Shopify\Support\Path;
 use Signifly\Shopify\Support\ResourceKey;
+use Signifly\Shopify\TransformsResources;
 
 abstract class Action
 {
+    use TransformsResources;
+
     /**
      * The parent resource key.
      *
@@ -72,10 +76,7 @@ abstract class Action
             $this->path()->withParams($params)
         );
 
-        return $this->transformCollection(
-            $response[$this->resourceKey->plural()],
-            $this->resourceKey->resourceClassName()
-        );
+        return $this->transformCollectionFromResponse($response);
     }
 
     /**
@@ -153,6 +154,23 @@ abstract class Action
     }
 
     /**
+     * Paginate results.
+     *
+     * @param  array  $params
+     * @return \Signifly\Shopify\Support\Cursor
+     */
+    public function paginate(array $params = []): Cursor
+    {
+        $this->guardAgainstMissingParent('paginate');
+
+        $response = $this->shopify->get(
+            $this->path()->withParams($params)
+        );
+
+        return new Cursor($this->shopify, $this->resourceKey, $response);
+    }
+
+    /**
      * Update the resource.
      *
      * @param  int|string $id
@@ -196,6 +214,16 @@ abstract class Action
         if ($this->requiresParent($methodName) && ! $this->hasParent()) {
             throw InvalidActionException::requiresParent(static::class, $methodName);
         }
+    }
+
+    /**
+     * Get the resource key.
+     *
+     * @return \Signifly\Shopify\Support\ResourceKey
+     */
+    protected function getResourceKey(): ResourceKey
+    {
+        return $this->resourceKey;
     }
 
     /**
@@ -244,45 +272,5 @@ abstract class Action
         }
 
         return in_array($methodName, $this->requiresParent);
-    }
-
-    /**
-     * Transform the items of the collection to the given class.
-     *
-     * @param  array $collection
-     * @param  string $class
-     * @return Collection
-     */
-    protected function transformCollection(array $collection, string $class): Collection
-    {
-        return collect($collection)->map(function ($attributes) use ($class) {
-            return $this->transformItem($attributes, $class);
-        });
-    }
-
-    /**
-     * Transform the item to the given class.
-     *
-     * @param  array $item
-     * @param  string $class
-     * @return array
-     */
-    protected function transformItem(array $attributes, string $class): ApiResource
-    {
-        return new $class($attributes, $this->shopify);
-    }
-
-    /**
-     * Transform item from response.
-     *
-     * @param  array $response
-     * @return \Signifly\Shopify\Resources\ApiResource
-     */
-    protected function transformItemFromResponse($response): ApiResource
-    {
-        return $this->transformItem(
-            $response[$this->resourceKey->singular()],
-            $this->resourceKey->resourceClassName()
-        );
     }
 }
