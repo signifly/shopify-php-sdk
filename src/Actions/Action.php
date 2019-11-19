@@ -107,7 +107,7 @@ abstract class Action
         $this->guardAgainstMissingParent('create');
 
         $response = $this->shopify->post($this->path(), [
-            $this->getSingularResourceKey() => $data,
+            $this->resourceKey->singular() => $data,
         ]);
 
         return $this->transformItemFromResponse($response);
