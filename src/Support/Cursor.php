@@ -120,7 +120,7 @@ class Cursor implements Iterator
     }
 
     /**
-     * Checks if current position is valid
+     * Checks if current position is valid.
      *
      * @return bool
      */
