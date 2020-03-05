@@ -74,13 +74,13 @@ class Path
     public function build(): string
     {
         $path = collect([
-                $this->prepends,
-                $this->resourceKey->plural(),
-                $this->id,
-                $this->appends,
-            ])
-            ->filter()
-            ->implode('/');
+            $this->prepends,
+            $this->resourceKey->plural(),
+            $this->id,
+            $this->appends,
+        ])
+        ->filter()
+        ->implode('/');
 
         $uri = "{$path}.{$this->format}";
 
