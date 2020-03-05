@@ -6,6 +6,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Arr;
 use Signifly\Shopify\Test\Profiles\GuzzleMockHandlerProfile;
 
 trait MocksGuzzleClient
@@ -38,7 +39,7 @@ trait MocksGuzzleClient
 
     protected function getLatestMockHistoryRequest()
     {
-        return array_last($this->mockHistory)['request'];
+        return Arr::last($this->mockHistory)['request'];
     }
 
     protected function getLatestMockHistoryPath()

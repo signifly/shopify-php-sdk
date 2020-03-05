@@ -2,7 +2,7 @@
 
 namespace Signifly\Shopify\Test\Unit\Actions;
 
-use Exception;
+use Signifly\Shopify\Exceptions\InvalidActionException;
 use Signifly\Shopify\Resources\VariantResource;
 use Signifly\Shopify\Shopify;
 use Signifly\Shopify\Test\TestCase;
@@ -11,10 +11,11 @@ class VariantActionTest extends TestCase
 {
     /**
      * @test
-     * @expectedException Exception
      */
     public function it_requires_parent_to_create()
     {
+        $this->expectException(InvalidActionException::class);
+
         $profile = $this->makeGuzzleMockHandlerProfile();
         $shopify = new Shopify($profile);
 
